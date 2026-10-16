@@ -1,4 +1,4 @@
-package org.example.minishop.exception;
+package org.example.minishop.exception.user;
 
 public class UserDoesNotExistException extends RuntimeException {
     public UserDoesNotExistException(String email) {

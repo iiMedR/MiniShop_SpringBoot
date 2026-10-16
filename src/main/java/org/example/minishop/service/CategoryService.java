@@ -2,7 +2,7 @@ package org.example.minishop.service;
 
 import org.example.minishop.dto.category.CategoryResponse;
 import org.example.minishop.dto.category.CreateCategoryRequest;
-import org.example.minishop.exception.CategoryAlreadyExistException;
+import org.example.minishop.exception.category.CategoryAlreadyExistException;
 import org.example.minishop.model.Category;
 import org.example.minishop.repository.CategoryRepository;
 import org.springframework.stereotype.Service;

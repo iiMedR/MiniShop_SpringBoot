@@ -1,7 +1,7 @@
 package org.example.minishop.service;
 
 import org.example.minishop.model.User;
-import org.example.minishop.exception.UserDoesNotExistException;
+import org.example.minishop.exception.user.UserDoesNotExistException;
 import org.example.minishop.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

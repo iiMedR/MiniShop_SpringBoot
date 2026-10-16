@@ -1,9 +1,8 @@
 package org.example.minishop.service.auth;
 
-import org.example.minishop.dto.auth.LoginRequest;
 import org.example.minishop.dto.auth.RegisterRequest;
 import org.example.minishop.dto.user.UserResponse;
-import org.example.minishop.exception.UserAlreadyExistException;
+import org.example.minishop.exception.user.UserAlreadyExistException;
 import org.example.minishop.model.User;
 import org.example.minishop.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;

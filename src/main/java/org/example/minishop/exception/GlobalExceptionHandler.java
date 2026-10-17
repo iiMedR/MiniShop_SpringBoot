@@ -2,6 +2,7 @@ package org.example.minishop.exception;
 
 import org.example.minishop.exception.category.CategoryAlreadyExistException;
 import org.example.minishop.exception.category.CategoryNotFoundException;
+import org.example.minishop.exception.order.InsufficientItemsInStock;
 import org.example.minishop.exception.product.ProductNotFoundException;
 import org.example.minishop.exception.user.UserAlreadyExistException;
 import org.example.minishop.exception.user.UserDoesNotExistException;
@@ -84,6 +85,18 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(InsufficientItemsInStock.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientItemsInStock(InsufficientItemsInStock e) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(errorResponse);
     }
 }

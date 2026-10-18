@@ -1,5 +1,6 @@
 package org.example.minishop.config;
 
+import jakarta.servlet.DispatcherType;
 import org.example.minishop.model.User;
 import org.example.minishop.security.CustomUserDetailsService;
 import org.example.minishop.security.JwtAuthenticationFilter;
@@ -36,6 +37,7 @@ public class SecurityConfig {
                                         "/swagger-ui.html",
                                         "/v3/api-docs/**"
                                 ).permitAll()
+                                .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(

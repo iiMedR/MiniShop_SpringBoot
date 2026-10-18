@@ -3,6 +3,8 @@ package org.example.minishop.exception;
 import org.example.minishop.exception.category.CategoryAlreadyExistException;
 import org.example.minishop.exception.category.CategoryNotFoundException;
 import org.example.minishop.exception.order.InsufficientItemsInStock;
+import org.example.minishop.exception.order.OrderAlreadyCancelledException;
+import org.example.minishop.exception.order.OrderNotFoundException;
 import org.example.minishop.exception.product.ProductNotFoundException;
 import org.example.minishop.exception.user.UserAlreadyExistException;
 import org.example.minishop.exception.user.UserDoesNotExistException;
@@ -97,6 +99,30 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleOrderNotFoundException(OrderNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(OrderAlreadyCancelledException.class)
+    public ResponseEntity<ErrorResponse> handleOrderAlreadyCancelledException(OrderAlreadyCancelledException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
                 .body(errorResponse);
     }
 }

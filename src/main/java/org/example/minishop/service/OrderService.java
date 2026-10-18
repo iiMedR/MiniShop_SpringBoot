@@ -5,11 +5,10 @@ import org.example.minishop.dto.order.CreateOrderRequest;
 import org.example.minishop.dto.order.OrderItemResponse;
 import org.example.minishop.dto.order.OrderResponse;
 import org.example.minishop.exception.order.InsufficientItemsInStock;
+import org.example.minishop.exception.order.OrderAlreadyCancelledException;
+import org.example.minishop.exception.order.OrderNotFoundException;
 import org.example.minishop.exception.product.ProductNotFoundException;
-import org.example.minishop.model.Order;
-import org.example.minishop.model.OrderItem;
-import org.example.minishop.model.OrderStatus;
-import org.example.minishop.model.Product;
+import org.example.minishop.model.*;
 import org.example.minishop.repository.OrderItemRepository;
 import org.example.minishop.repository.OrderRepository;
 import org.example.minishop.repository.ProductRepository;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -82,5 +82,38 @@ public class OrderService {
 
         return toResponse(savedOrder);
 
+    }
+
+    @Transactional
+    public List<OrderResponse> getAllOrders(){
+        User user = userService.getCurrentUser();
+        List<Order> orders = orderRepository.findByUserId(user.getId());
+        return orders.stream().map(this::toResponse).toList();
+    }
+
+    @Transactional
+    public OrderResponse getOrderById(Long id){
+        User user = userService.getCurrentUser();
+        Order order = orderRepository.findByIdAndUserId(id, user.getId())
+                .orElseThrow(() -> new OrderNotFoundException(id));
+        return toResponse(order);
+    }
+
+    @Transactional
+    public void cancelOrder(Long id){
+        User user = userService.getCurrentUser();
+        Order order = orderRepository.findByIdAndUserId(id, user.getId())
+                .orElseThrow(() -> new OrderNotFoundException(id));
+
+        if(order.getStatus() == OrderStatus.CANCELLED) {
+            throw new OrderAlreadyCancelledException(id);
+        }
+
+        order.getOrderItems().forEach(orderItem -> {
+            Integer productQuantity = orderItem.getQuantity();
+            Product product = orderItem.getProduct();
+            product.setStock(product.getStock() + productQuantity);
+        });
+        order.setStatus(OrderStatus.CANCELLED);
     }
 }

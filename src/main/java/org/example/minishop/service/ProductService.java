@@ -10,6 +10,8 @@ import org.example.minishop.model.Category;
 import org.example.minishop.model.Product;
 import org.example.minishop.repository.CategoryRepository;
 import org.example.minishop.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,9 +41,9 @@ public class ProductService {
         return toResponse(product);
     }
 
-    public List<ProductResponse> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-        return products.stream().map(this::toResponse).toList();
+    public Page<ProductResponse> getAllProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        return products.map(this::toResponse);
     }
 
     public ProductResponse getProductById(Long id) {
